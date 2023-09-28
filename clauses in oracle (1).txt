@@ -1,0 +1,311 @@
+#create table : Employee
+
+CREATE TABLE Employee (
+  Id INT PRIMARY KEY,
+  Name VARCHAR(15),
+  Department VARCHAR(10),
+  Salary NUMBER(8, 2),
+  Gender VARCHAR(10),
+  Comm INT,
+  City VARCHAR(10)
+);
+
+===========================================================================================================================================
+
+# insert 10 rows into the employee table
+
+
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1001, 'John', 'IT', 35000, 'Male', 3500, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1002, 'Smith', 'HR', 45000, 'Female', 4500, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1003, 'James', 'Finance', 50000, 'Male', 5000, 'Delhi');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1004, 'Mike', 'Finance', 50000, 'Male', NULL, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1005, 'Linda', 'HR', 75000, 'Female', NULL, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1006, 'Anurag', 'IT', 35000, 'Male', NULL, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1007, 'Priyanla', 'HR', 45000, 'Female', NULL, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1008, 'Sambit', 'IT', 55000, 'Male', 5500, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1009, 'Pranaya', 'IT', 57000, 'Male', 5700, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1010, 'Hina', 'HR', 75000, 'Female', 7500, 'Mumbai');
+
+===========================================================================================================================================
+
+# Examples:  where clause
+
+1. SELECT * FROM Employee WHERE Department = ‘IT’;
+
+2. SELECT * FROM Employee WHERE Gender = ‘Male’ AND Salary > 35000;
+
+3. SELECT * FROM Employee WHERE Gender = ‘Female’ OR Department = ‘IT’;
+
+4. SELECT * FROM Employee WHERE (Gender = ‘Female’ OR Department = ‘IT’) AND Salary > 35000;
+
+5. UPDATE Employee SET Salary = Salary + 2000 WHERE Department = ‘IT’;
+
+6. DELETE FROM Employee WHERE Department = ‘IT’;
+
+===========================================================================================================================================
+
+# Examples:  order by clause
+
+1. SELECT * FROM Employee ORDER BY Name;
+
+2. SELECT * FROM Employee ORDER BY Name ASC;
+
+3. SELECT * FROM Employee ORDER BY Name DESC;
+
+4. SELECT * FROM Employee WHERE City = ‘London’ ORDER BY Name ASC;
+
+5. SELECT Id, Department, Name, Salary, City, Comm, Gender
+   FROM Employee
+   ORDER BY Department DESC, Name ASC;
+
+6. SELECT Name, Department, Gender, City FROM Employee ORDER BY 2 ASC;
+
+7. SELECT Name n, Department, Gender, City FROM Employee ORDER BY n ASC;
+        
+8. SELECT * FROM Employee ORDER BY COMM   NULLS FIRST;
+
+9. SELECT * FROM Employee ORDER BY COMM DESC NULLS LAST;
+
+===========================================================================================================================================
+
+# Examples:  group by clause
+
+1. Example: Count the total number of employees in the Employee table
+       SELECT COUNT(*) AS TotalEmployee FROM Employee;
+
+2. Example: Count the total number of employees in each department from the Employee table
+     
+       SELECT Department, COUNT(*) AS TotalEmployee FROM Employee GROUP BY Department;
+
+
+3. Example: Find the total salary given to all employees
+     SELECT SUM(Salary) as TotalSalary FROM Employee
+
+
+4. Example: Count the total salary given to each department in the employee table
+     SELECT Department, SUM(Salary) as TotalSalary FROM Employee GROUP BY Department;
+
+5. Example: Find the Highest and Lowest salary in Each Department in the Employee table.
+    SELECT min(Salary) as MinSalary ,max(salary)  as Max Salary FROM Employee;
+
+    SELECT Department, MAX(SALARY) as MaxSalary, MIN(SALARY) as MinSalary
+    FROM Employee
+    GROUP BY Department;
+
+
+6. Example: Find the number of employees working in each Gender per Department
+  SELECT Department, Gender, COUNT(*) AS EmployeeCount
+  FROM Employee
+  GROUP BY Department, Gender
+  ORDER BY Department;
+
+7. Example: Find the total salaries and the total number of employees by City, and by gender
+    SELECT City, Gender, SUM(Salary) as TotalSalary, COUNT(ID) as TotalEmployees
+    FROM Employee
+    GROUP BY CITY, Gender;
+
+8. Example: Find the average salary 
+     SELECT  AVG(Salary) as AverageSalary  FROM Employee;
+
+
+9. Example: Find the average salary of each department
+   SELECT Department, AVG(Salary) as AverageSalary
+   FROM Employee
+   GROUP BY Department;
+
+
+
+===========================================================================================================================================
+
+# Examples:  having clause
+
+
+
+1. Filtering rows using WHERE clause in Oracle
+   SELECT City, SUM(Salary) as TotalSalary
+   FROM Employee
+   WHERE City = 'London'
+   GROUP BY City;
+
+2.Filtering groups using the HAVING clause in Oracle
+   SELECT City, SUM(Salary) as TotalSalary
+   FROM Employee
+   GROUP BY City
+   HAVING City = 'London';
+
+Note: From the performance point of view, the HAVING Clause is slower than the WHERE clause, and having clause should be avoided if possible.
+
+
+3. Using both Having and Where Clause in Oracle
+It is also possible in Oracle to use both WHERE and HAVING clauses in a single SQL Select Statement.
+    We want to retrieve the total salary of all the Male employees who are working in London. 
+    SELECT City, SUM(Salary) as TotalSalary
+    FROM Employee
+    WHERE Gender = 'Male'
+    GROUP BY City
+    HAVING City = 'London';
+
+
+In the above query, first, we filter the data based on the WHERE clause i.e. filter the employees by Gender. Then GROUP BY clause is applied to the filter result set based on the city column. Finally, the Having clause applied to the groups and return only the London group.
+
+
+
+4.Having Clause using SUM Function in Oracle
+
+    to find all the departments whose total salary is greater than 170000.
+
+    SELECT Department, SUM(Salary) AS Total_Salary
+    FROM Employee
+    GROUP BY Department
+    HAVING SUM(Salary) > 170000;
+
+
+5. Having Clause using COUNT Function in Oracle:
+   
+
+   to find all the departments whose total number of employees working in that department is greater than 3.
+
+     SELECT Department, COUNT(*) AS "Number of Employees"
+     FROM Employee
+     GROUP BY Department
+     HAVING COUNT(*) > 3;
+
+
+6.Having Clause using AVG Aggregate Function in Oracle:
+
+
+    to find all the departments where the average salary is more than 49000.
+
+    SELECT Department, AVG(Salary) AS "Average salary"
+    FROM Employee
+    GROUP BY Department
+    HAVING AVG(Salary) > 49000;
+
+
+7. Having Clause Using MIN Function in Oracle:
+
+    to find all the departments where the minimum salary is greater than 40000.
+
+   SELECT Department, MIN(Salary) AS "Minimum salary"
+   FROM Employee
+   GROUP BY Department
+   HAVING MIN(Salary) > 40000;
+
+
+8. Having Clause Using MAX Function in Oracle:
+
+   to find all the departments where the maximum salary is greater than 50000.
+
+    SELECT Department, MAX(Salary) AS "Maximum salary"
+    FROM Employee
+    GROUP BY Department
+    HAVING MAX(Salary) > 50000;
+
+
+===========================================================================================================================================
+
+drop table employee purge;
+
+# Create Table: Employee
+
+CREATE TABLE Employee (
+  Id INT PRIMARY KEY,
+  Name VARCHAR(15),
+  Department VARCHAR(10),
+  Salary NUMBER(8, 2),
+  Gender VARCHAR(10),
+  Comm INT,
+  City VARCHAR(10)
+);
+
+=============================================================================================================================================
+# insert 11 rows into the Employee table
+
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1001, 'John', 'IT', 35000, 'Male', 3500, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1002, 'Smith', 'HR', 45000, 'Male', 4500, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1003, 'James', 'Finance', 50000, 'Male', 5000, 'Delhi');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1004, 'Mike', 'Finance', 50000, 'Male', NULL, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1005, 'Linda', 'HR', 75000, 'Female', NULL, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1006, 'Anurag', 'IT', 35000, 'Male', NULL, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1007, 'Priyanla', 'HR', 45000, 'Female', NULL, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1008, 'Sambit', 'IT', 55000, 'Female', 5500, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1009, 'Pranaya', 'IT', 57000, 'Female', 5700, 'London');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1010, 'Hina', 'HR', 75000, 'Male', 7500, 'Mumbai');
+INSERT INTO Employee (Id, Name, Department, Salary, Gender, Comm, City) VALUES (1011, 'Warner', 'Finance', 55000, 'Female', NULL, 'London');
+
+
+==================================================================================================================================================
+
+
+# Examples : rollup
+
+1. Example: ROLLUP with a single column:
+ 
+   SELECT Department, COUNT(*) FROM Employee GROUP BY ROLLUP(Department) order by 1;
+
+
+2. Example. ROLLUP with multiple columns
+   SELECT Department, Gender, COUNT(*) FROM Employee GROUP BY ROLLUP(Department, Gender) order by 1;
+
+
+
+# Examples  : cube
+
+3. Example: CUBE with a single column:
+   SELECT Department, COUNT(*) FROM Employee GROUP BY CUBE(Department) ORDER BY Department;
+
+
+4. Example: CUBE with multiple columns
+   SELECT Department, Gender, COUNT(*) FROM Employee GROUP BY CUBE(Department, Gender) ORDER BY Department;   
+
+
+   
+  
+Examples: grouping_data()
+ 
+1. SELECT Department, Gender, COUNT(*), GROUPING_ID(Department, Gender)
+   FROM Employee
+   GROUP BY CUBE(Department, Gender)
+   ORDER BY Department;
+
+2.   SELECT Department, Gender, COUNT(*), 
+     case GROUPING_ID(Department, Gender)
+     when 1 then 'dept subtotal'
+     when 2 then 'gender subtotal'
+     when 3 then 'grand total' 
+     end as total
+     FROM Employee
+     GROUP BY CUBE(Department, Gender)
+     ORDER BY Department;
+
+=====================================================================================================================================
+
+# Example:  FETCH FIRST  N  ROWS Only 
+
+ 1.  To select the first 3 records from the Employee table.
+      SELECT * FROM Employee FETCH FIRST 3 ROWS ONLY;
+
+
+ 2. Example: Fetch the first 3 records from the Employee table where Gender is Male. 
+      SELECT * FROM Employee WHERE Gender = ‘Male’ FETCH FIRST 3 ROWS ONLY;
+
+3. Example:  FETCH FIRST PERCENT Clause in Oracle
+      SELECT * FROM Employee FETCH FIRST 50 PERCENT ROWS ONLY;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
